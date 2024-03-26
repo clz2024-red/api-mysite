@@ -23,27 +23,27 @@ public class UserController {
 	
 	//로그인
 	@PostMapping("/api/users/login")
-	public UserVo login(@RequestBody UserVo userVo, HttpServletResponse response) {
+	public JsonResult login(@RequestBody UserVo userVo, HttpServletResponse response) {
 		System.out.println("UserController.login()");
-		
-		System.out.println(userVo);
 		
 		//no name                     id pw
 		UserVo authUser = userService.exeLogin(userVo);
-		System.out.println(authUser);
-		
 		
 		if(authUser != null) {//로그인에 성공하면
 			//토큰발급해서 응답문서의 헤더에 실어 보낸다
-			JwtUtil.createTokenAndSetHeader(response, ""+authUser.getNo());			
+			JwtUtil.createTokenAndSetHeader(response, ""+authUser.getNo());	
+			return JsonResult.success(authUser);
+		
+		}else {
+			
+			return JsonResult.fail("로그인실패");
 		}
 	
-		return authUser;
 	}
 	
 	//회원정보 수정폼(1명 데이터가져오기)
 	@GetMapping("/api/users/modify")
-	public UserVo modifyform(HttpServletRequest request) {
+	public JsonResult modifyform(HttpServletRequest request) {
 		System.out.println("UserController.modifyform()");
 		
 		/*
@@ -68,11 +68,12 @@ public class UserController {
 			//정상
 			UserVo userVo = userService.exeModifyForm(no);
 			System.out.println(userVo);
-			return userVo;
+			
+			return JsonResult.success(userVo);
 			
 		}else {
 			//토큰이 없거나(로그인상태아님), 변조된 경우
-			return null;
+			return JsonResult.fail("토큰X, 비로그인, 변조");
 		}
 		
 	}
