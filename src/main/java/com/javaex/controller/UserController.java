@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaex.service.UserService;
+import com.javaex.util.JsonResult;
 import com.javaex.util.JwtUtil;
 import com.javaex.vo.UserVo;
 
@@ -79,7 +80,7 @@ public class UserController {
 
 	//회원정보 수정
 	@PutMapping("/api/users/modify")
-	public String modify(@RequestBody UserVo userVo, HttpServletRequest request) {
+	public JsonResult modify(@RequestBody UserVo userVo, HttpServletRequest request) {
 		System.out.println("UserController.modify()");
 		
 		System.out.println(userVo);
@@ -88,10 +89,10 @@ public class UserController {
 		if(no != -1) {//정상
 			//db에 수정시킨다
 			userService.exeModify(userVo);
-			return "";
+			return JsonResult.success(userVo.getName());
 			
-		}else {
-			return "";
+		}else { 
+			return JsonResult.fail("로그인하지않음");
 		}
 		
 	}
