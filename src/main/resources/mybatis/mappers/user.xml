@@ -3,6 +3,32 @@
 
 <mapper namespace="user">
 
+	<!-- 회원정보수정 -->
+	<update id="update" parameterType="com.javaex.vo.UserVo">
+		<![CDATA[ 
+			update users
+			set name = #{name},
+				password = #{password},
+				gender = #{gender}
+			where no = #{no}
+		]]>
+	</update>
+
+	<!-- no로 한명데이터 가져오기(회원정보수정 폼) -->
+	<select id="selectOneByNo" parameterType="int" resultType="com.javaex.vo.UserVo">
+		<![CDATA[ 
+			select 	no, 
+					id,
+					name,
+					password,
+					gender
+			from users
+			where no = #{no}
+		]]>
+	</select>
+
+
+	<!-- id,pw로 한명데이터 가져오기(로그인) -->
 	<select id="selectByIdPw" parameterType="com.javaex.vo.UserVo" resultType="com.javaex.vo.UserVo">
 		<![CDATA[
 			select  no,
